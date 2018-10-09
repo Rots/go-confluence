@@ -69,7 +69,12 @@ func TokenAuth(tokenkey string) AuthMethod {
 	return tokenAuthCallback(func() string { return tokenkey })
 }
 
-func (w *Wiki) sendRequest(req *http.Request) ([]byte, error) {
+// SendRequst sends the provided http request with authentication settings and returns
+// the response body if the request was successful, or returns an error, if the request
+// failed or an unexpected response code was returned.
+// This method is useful for implementing non-standard endpoints (Confluence add-ons) or
+// to replace/extend the parsing functionality of the response data.
+func (w *Wiki) SendRequest(req *http.Request) ([]byte, error) {
 	req.Header.Add("Accept", "application/json, */*")
 	w.authMethod.auth(req)
 
